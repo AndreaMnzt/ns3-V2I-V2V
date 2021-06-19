@@ -1,43 +1,28 @@
-# mmWave ns-3 module #
+# Integration of Mmwave and Millicar modules #
 
 This is an [ns-3](https://www.nsnam.org "ns-3 Website") module for the simulation
-of 5G cellular networks operating at mmWaves. A description of this module can be found in [this paper](https://ieeexplore.ieee.org/document/8344116/ "mmwave paper").
+of 5G cellular and vehicular networks operating at mmWaves.
 
-Main features:
+Features:
 
-* Support of a wide range of channel models, including the model based on 3GPP TR 38.901 for frequencies between 0.5 and 100 GHz. Ray tracing and measured traces can also be used.
-
-* Custom PHY and MAC classes supporting the 3GPP NR frame structure and numerologies.
-
-* Custom schedulers for supporting dynamic TDD formats
-
-* Carrier Aggregation at the MAC layer
-
-* Enhancements to the RLC layer with re-segmentation of packets for retransmissions
-
-* Dual Connectivity with LTE base stations, with fast secondary cell handover and channel tracking
-
-* Simulation of core network elements (with also the MME as a real node)
-
+* The module provides integration of mmwave and millicar modules to simulate vehicular scenarios with Vehicle to Vehicle (V2V) and Vehicle to Infrastructure (V2I) communication.
+  
 ## Installation
-This repository contains a complete ns-3 installation with the addition of the mmwave module. 
+This repository contains a complete ns-3 installation with the addition of the mmwave and millicar modules. 
 
-Use these commands to download and build `ns3-mmwave`:
+Use these commands to download and build `ns3-V2I-V2V`:
 ```
-git clone https://github.com/nyuwireless-unipd/ns3-mmwave.git
-cd ns3-mmwave
+git clone https://github.com/AndreaMnzt/ns3-V2I-V2V.git
+cd ns3-V2I-V2V
 ./waf configure --disable-python --enable-examples && ./waf build
 ```
 
-## Usage example
+## Usage example 
 You can use the following command to run the `mmwave-simple-epc` example. 
 ```
 ./waf --run mmwave-simple-epc
 ```
 Other examples are included in `src/mmwave/examples/`
-
-## Documentation
-The documentation of this module is available at [this link](./src/mmwave/doc/mmwave-doc.md).
 
 ## Related modules
 - MilliCar is an ns-3 module for the simulation of mmWave NR V2X networks. Check [this repo](https://github.com/signetlabdei/millicar) for further details.
@@ -57,19 +42,9 @@ These other papers describe features that were implemented in older releases:
 - [ns-3 Implementation of the 3GPP MIMO Channel Model for Frequency Spectrum above 6 GHz](https://dl.acm.org/citation.cfm?id=3067678 "wns3 2017") describes the implementation of the 3GPP channel model based on TR 38.900;
 - [Multi-Sector and Multi-Panel Performance in 5G mmWave Cellular Networks](https://arxiv.org/abs/1808.04905 "globecom2018") describes the multi-sector addition to the 3GPP channel model;
 
-If you use this module in your research, please cite:
-
-M. Mezzavilla, M. Zhang, M. Polese, R. Ford, S. Dutta, S. Rangan, M. Zorzi, _"End-to-End Simulation of 5G mmWave Networks,"_ in IEEE Communications Surveys & Tutorials, vol. 20, no. 3, pp. 2237-2263, thirdquarter 2018. [bibtex available here](https://ieeexplore.ieee.org/document/8344116/)
-
-## Future work
-We are actively developing new features for the mmWave module, including:
-- 3GPP NR beam tracking
-- 3GPP NR Integrated Access and Backhaul feature (see [this repo](https://github.com/signetlabdei/ns3-mmwave-iab) for more details)
 
 ## About
-This module is being developed by [NYU Wireless](http://wireless.engineering.nyu.edu/) and the [University of Padova](http://mmwave.dei.unipd.it/).
-This  work  was  supported  in  part by  the  U.S.  Department  of  Commerce  National  Institute  of  Standards  and Technology through the Project “An End-to-End Research Platform for Public Safety  Communications  above  6  GHz”  under  Award  70NANB17H16.
-
+The mmwave and millicar modules are being developed by [NYU Wireless](http://wireless.engineering.nyu.edu/) and the [University of Padova](http://mmwave.dei.unipd.it/).
 
 
 <!-- The new-handover branch offers integration between LTE and mmWave and dual connectivity features.
