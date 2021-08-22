@@ -22,7 +22,6 @@
 #include "ns3/double.h"
 #include "ns3/mmwave-vehicular-net-device.h"
 #include "ns3/internet-stack-helper.h"
-#include "ns3/single-model-spectrum-channel.h"
 #include "ns3/mmwave-vehicular-antenna-array-model.h"
 #include "ns3/pointer.h"
 #include "ns3/config.h"
@@ -270,6 +269,7 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
   bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
   ssp->SetBeamformingModel(bfModel);      
 
+  return device;
 }
 
 void
