@@ -200,7 +200,6 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
   NS_LOG_FUNCTION (this);
 
   // create the antenna
-  Ptr<MmWaveVehicularAntennaArrayModel> aam = CreateObject<MmWaveVehicularAntennaArrayModel> ();
   u_int16_t AntennaNum = 16;
   Ptr<ThreeGppAntennaArrayModel> antenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (sqrt (AntennaNum)), "NumColumns", UintegerValue (sqrt (AntennaNum)));
 
@@ -210,7 +209,8 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
   Ptr<MmWaveSidelinkSpectrumPhy> ssp = CreateObject<MmWaveSidelinkSpectrumPhy> ();
   NS_ASSERT_MSG (node->GetObject<MobilityModel> (), "Missing mobility model");
   ssp->SetMobility (node->GetObject<MobilityModel> ());
-  //ssp->SetAntenna (aam);
+  ssp->UseGppAntenna(true);
+  ssp->SetThreeGppAntenna(antenna);
   NS_ASSERT_MSG (m_channel, "First create the channel");
   ssp->SetChannel (m_channel);
 
@@ -262,6 +262,13 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
   {
     threeGppSplm->AddDevice (device, antenna);
   }
+
+  auto channelModel = threeGppSplm->GetChannelModel();
+  Ptr<mmwave::MmWaveBeamformingModel> bfModel = m_bfModelFactory.Create<mmwave::MmWaveBeamformingModel> ();
+  bfModel->SetAttributeFailSafe ("Device", PointerValue (device));
+  bfModel->SetAttributeFailSafe ("Antenna", PointerValue (antenna));
+  bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
+  ssp->SetBeamformingModel(bfModel);      
 
 }
 
