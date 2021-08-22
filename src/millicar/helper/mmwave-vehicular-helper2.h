@@ -20,12 +20,12 @@
 #ifndef MMWAVE_VEHICULAR_HELPER_H2
 #define MMWAVE_VEHICULAR_HELPER_H2
 
-#include "ns3/mmwave-vehicular.h"
 #include "ns3/node-container.h"
 #include "ns3/net-device-container.h"
 #include "ns3/spectrum-channel.h"
 #include "ns3/mmwave-phy-mac-common.h"
 #include "ns3/mmwave-vehicular-traces-helper.h"
+#include <ns3/cc-helper.h>
 
 namespace ns3 {
 
@@ -152,6 +152,12 @@ private:
   SchedulingPatternOption_t m_schedulingOpt; //!< the type of scheduling pattern policy to be adopted
 
   Ptr<MmWaveVehicularTracesHelper> m_phyTraceHelper; //!< Ptr to an helper for the physical layer traces
+
+  ObjectFactory m_channelConditionModelFactory; //!< the factory for the ChannelConditionModel objects
+  ObjectFactory m_spectrumPropagationLossModelFactory; //!< the factory for the SpectrumPropagationLossModel objects
+  ObjectFactory m_pathlossModelFactory; //!< the factory for the PathLossModel objects
+  ObjectFactory m_channelFactory; //!< the factory for the ChannelModel objects
+  ObjectFactory m_bfModelFactory; //!< the factory for the BeaformingModel objects
 
 };
 
