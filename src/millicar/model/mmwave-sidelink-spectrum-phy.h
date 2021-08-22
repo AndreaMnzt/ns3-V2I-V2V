@@ -42,6 +42,9 @@
 #include "ns3/mmwave-control-messages.h"
 #include <ns3/mmwave-error-model.h>
 
+#include <ns3/three-gpp-antenna-array-model.h>
+#include <ns3/mmwave-beamforming-model.h>
+
 namespace ns3 {
 
 namespace millicar {
@@ -260,6 +263,10 @@ public:
   */
   void SetErrorModelType (TypeId errorModelType);
 
+  /// New Methods ///
+  
+  void UseGppAntenna(bool useGppAntenna);
+
 private:
   /**
   * \brief Change state function
@@ -311,6 +318,9 @@ private:
   //EventId m_endRxCtrlEvent;
   
   TypeId m_errorModelType; //!< the type id of the error model
+
+  bool m_useGppAntenna; //flag to indicate if gpp antenna is used
+  Ptr<mmwave::MmWaveBeamformingModel> m_beamforming; //!< used to compute the beamforming vector
 
 };
 

@@ -617,3 +617,10 @@ MmWaveSidelinkSpectrumPhy::SetErrorModelType (TypeId errorModelType)
                    "The error model must be a subclass of MmWaveErrorModel!");
   m_errorModelType = errorModelType;
 }
+
+void
+MmWaveSidelinkSpectrumPhy::UseGppAntenna(bool useGppAntenna)
+{
+  m_useGppAntenna = useGppAntenna;
+}
+
