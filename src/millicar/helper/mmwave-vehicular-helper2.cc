@@ -500,7 +500,7 @@ MmWaveVehicularHelper2::GetPathLossModel ()
 }
 
 
-//beamforming methods
+// beamforming methods
 
 void
 MmWaveVehicularHelper2::SetBeamformingModelType (std::string type)
@@ -531,7 +531,98 @@ MmWaveVehicularHelper2::GetSpectrumChannel ()
   return m_channel;
 }
 
+// setup channel 
 
+void
+MmWaveVehicularHelper2::MmWaveChannelModelInitialization (void)
+{
+  NS_LOG_FUNCTION (this);
+  // setup of mmWave channel & related
+  
+  Ptr<SpectrumChannel> channel = m_channelFactory.Create<SpectrumChannel> ();
+  
+  // create the channel condition model (if needed)
+  Ptr<ChannelConditionModel> ccm;
+  if (!m_channelConditionModelType.empty ())
+  {
+    ccm = m_channelConditionModelFactory.Create<ChannelConditionModel> ();
+  }
+
+  // create the propagation loss model
+  if (!m_pathlossModelType.empty ())
+    {
+      Ptr<PropagationLossModel> plm = m_pathlossModelFactory.Create<PropagationLossModel> ();
+      if (plm)
+        {
+          plm->SetAttributeFailSafe ("Frequency", DoubleValue (m_phyMacConfig->GetCenterFrequency ()));
+
+          // associate the channel condition model to the propagation loss model (if needed)
+          if (ccm)
+          {
+            plm->SetAttributeFailSafe ("ChannelConditionModel", PointerValue (ccm));
+          }
+
+          // set the propagation loss model in the channel
+          channel->AddPropagationLossModel (plm);
+        }
+
+      // store the propagation loss model
+      m_pathlossModel = plm;
+    }
+    else
+    {
+      NS_LOG_WARN (this << " No PropagationLossModel!");
+    }
+
+    // create and configure the SpectrumPropagationLossModel
+    if (!m_spectrumPropagationLossModelType.empty ())
+      {
+        Ptr<SpectrumPropagationLossModel> splm = m_spectrumPropagationLossModelFactory.Create<SpectrumPropagationLossModel> ();
+        
+        
+        // if the selected model is ThreeGppSpectrumPropagationLossModel we 
+        // need a special configuration procedure, otherwise, for the other 
+        // models, we try to configure the frequency
+        Ptr<ThreeGppSpectrumPropagationLossModel> threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel> (splm);
+        if (threeGppSplm)
+        {
+          threeGppSplm->SetChannelModelAttribute ("Frequency", DoubleValue (m_phyMacConfig->GetCenterFrequency ()));
+              
+          // the ThreeGppSpectrumPropagationLossModel must have the same ChannelConditionModel as the 
+          // propagation loss model instace
+          if (ccm) // the channel condition model was created using the factory
+          {
+            threeGppSplm->SetChannelModelAttribute ("ChannelConditionModel", PointerValue (ccm));
+          }
+          else if (!m_pathlossModel) // the channel condition model was created inside the propagation loss model 
+          {
+            PointerValue ptr; 
+            m_pathlossModel->GetAttribute ("ChannelConditionModel", ptr);
+            ccm = ptr.Get<ChannelConditionModel> ();
+            threeGppSplm->SetChannelModelAttribute ("ChannelConditionModel", PointerValue (ccm));
+          }
+          else
+          {
+            NS_LOG_DEBUG ("ChannelConditionModel not set for ThreeGppSpectrumPropagationLossModel");
+          }
+        }
+        else 
+        {
+          splm->SetAttributeFailSafe ("Frequency", DoubleValue (m_phyMacConfig->GetCenterFrequency ()));
+        }
+
+        // set the propagation loss model in the channel
+        auto matrix = threeGppSplm->GetChannelModel();
+        channel->AddSpectrumPropagationLossModel (threeGppSplm);
+      }
+      else
+      {
+        NS_LOG_WARN (this << " No SpectrumPropagationLossModel!");
+      }
+
+      m_channel = channel;
+    
+}
 
 
 

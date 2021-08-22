@@ -173,7 +173,7 @@ public:
 
   
 
-  //void MmWaveChannelModelInitialization (void);
+  void MmWaveChannelModelInitialization (void);
 
   
 protected:
