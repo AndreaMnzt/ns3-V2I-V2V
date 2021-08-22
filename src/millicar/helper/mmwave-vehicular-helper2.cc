@@ -141,37 +141,8 @@ MmWaveVehicularHelper2::DoInitialize ()
                                                                              "Bandwidth", DoubleValue (m_bandwidth));
   }
 
-  // create the channel
-  m_channel = CreateObject<SingleModelSpectrumChannel> ();
-  if (!m_propagationLossModelType.empty ())
-  {
-    ObjectFactory factory (m_propagationLossModelType);
-    m_channel->AddPropagationLossModel (factory.Create<PropagationLossModel> ());
-  }
-  if (!m_spectrumPropagationLossModelType.empty ())
-  {
-    ObjectFactory factory (m_spectrumPropagationLossModelType);
-    m_channel->AddSpectrumPropagationLossModel (factory.Create<SpectrumPropagationLossModel> ());
-  }
-  if (!m_propagationDelayModelType.empty ())
-  {
-    ObjectFactory factory (m_propagationDelayModelType);
-    m_channel->SetPropagationDelayModel (factory.Create<PropagationDelayModel> ());
-  }
-
-  // 3GPP vehicular channel needs proper configuration
-  if (m_spectrumPropagationLossModelType == "ns3::MmWaveVehicularSpectrumPropagationLossModel")
-  {
-    Ptr<MmWaveVehicularSpectrumPropagationLossModel> threeGppSplm = DynamicCast<MmWaveVehicularSpectrumPropagationLossModel> (m_channel->GetSpectrumPropagationLossModel ());
-    PointerValue plm;
-    m_channel->GetAttribute ("PropagationLossModel", plm);
-    
-    Ptr<MmWaveVehicularPropagationLossModel> pathloss = DynamicCast<MmWaveVehicularPropagationLossModel> (plm.Get<PropagationLossModel> ());
-    pathloss->SetFrequency (m_phyMacConfig->GetCenterFrequency());
-    
-    threeGppSplm->SetPathlossModel (pathloss); // associate pathloss and fast fading models
-    threeGppSplm->SetFrequency (m_phyMacConfig->GetCenterFrequency()); // set correct value of frequency
-    
+  if (!m_channel){
+    MmWaveChannelModelInitialization ();      // channel initialization
   }
 }
 
