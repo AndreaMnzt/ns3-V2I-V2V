@@ -176,6 +176,10 @@ MmWaveSidelinkSpectrumPhy::GetRxSpectrumModel () const
 Ptr<AntennaModel>
 MmWaveSidelinkSpectrumPhy::GetRxAntenna ()
 {
+  if(m_useGppAntenna)
+  {
+    return 0;
+  }
   return m_antenna;
 }
 
@@ -608,6 +612,13 @@ MmWaveSidelinkSpectrumPhy::ConfigureBeamforming (Ptr<NetDevice> dev)
     // vectors each time
     antennaArray->SetBeamformingVectorPanelDevices (m_device, dev);
   }
+
+  Ptr<ThreeGppAntennaArrayModel> threeGppAntennaArray = DynamicCast<ThreeGppAntennaArrayModel> (m_threeGppAntenna);
+  if (m_useGppAntenna && threeGppAntennaArray)
+  {
+    m_beamforming->SetBeamformingVectorForDevice (dev, threeGppAntennaArray);
+  }
+
 }
 
 void
@@ -618,9 +629,36 @@ MmWaveSidelinkSpectrumPhy::SetErrorModelType (TypeId errorModelType)
   m_errorModelType = errorModelType;
 }
 
+/// New Methods ///
+
 void
 MmWaveSidelinkSpectrumPhy::UseGppAntenna(bool useGppAntenna)
 {
   m_useGppAntenna = useGppAntenna;
 }
 
+
+void
+MmWaveSidelinkSpectrumPhy::SetThreeGppAntenna (Ptr<ThreeGppAntennaArrayModel> a)
+{
+  NS_ABORT_MSG_IF (!m_useGppAntenna,
+                   "First enable the usage of Three Gpp Antennas with UseGppAntenna(true).");
+  
+  m_threeGppAntenna = a;
+}
+
+void
+MmWaveSidelinkSpectrumPhy::SetBeamformingModel (Ptr<mmwave::MmWaveBeamformingModel> bfModule)
+{
+  NS_LOG_FUNCTION (this);
+
+  m_beamforming = bfModule;
+}
+
+Ptr<mmwave::MmWaveBeamformingModel>
+MmWaveSidelinkSpectrumPhy::GetBeamformingModel () const
+{
+  NS_LOG_FUNCTION (this);
+
+  return m_beamforming;
+}

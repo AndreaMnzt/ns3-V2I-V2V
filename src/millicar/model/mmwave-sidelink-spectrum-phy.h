@@ -267,6 +267,12 @@ public:
   
   void UseGppAntenna(bool useGppAntenna);
 
+  void SetThreeGppAntenna (Ptr<ThreeGppAntennaArrayModel> a);
+  
+  void SetBeamformingModel (Ptr<mmwave::MmWaveBeamformingModel> bfModule);
+  
+  Ptr<mmwave::MmWaveBeamformingModel> GetBeamformingModel () const;
+
 private:
   /**
   * \brief Change state function
@@ -320,6 +326,7 @@ private:
   TypeId m_errorModelType; //!< the type id of the error model
 
   bool m_useGppAntenna; //flag to indicate if gpp antenna is used
+  Ptr<ThreeGppAntennaArrayModel> m_threeGppAntenna; ///< the three gpp antenna model
   Ptr<mmwave::MmWaveBeamformingModel> m_beamforming; //!< used to compute the beamforming vector
 
 };
