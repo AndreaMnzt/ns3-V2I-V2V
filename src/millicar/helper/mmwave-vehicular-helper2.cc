@@ -24,9 +24,12 @@
 #include "ns3/internet-stack-helper.h"
 #include "ns3/single-model-spectrum-channel.h"
 #include "ns3/mmwave-vehicular-antenna-array-model.h"
-#include "ns3/mmwave-vehicular-spectrum-propagation-loss-model.h"
 #include "ns3/pointer.h"
 #include "ns3/config.h"
+
+#include "ns3/multi-model-spectrum-channel.h"
+#include <ns3/channel-condition-model.h>
+#include <ns3/mmwave-beamforming-model.h>
 
 namespace ns3 {
 
@@ -40,6 +43,9 @@ MmWaveVehicularHelper2::MmWaveVehicularHelper2 ()
 : m_phyTraceHelper{CreateObject<MmWaveVehicularTracesHelper>("sinr-mcs.txt")} // TODO name as attribute
 {
   NS_LOG_FUNCTION (this);
+  m_channelFactory.SetTypeId (MultiModelSpectrumChannel::GetTypeId ());
+  m_bfModelFactory.SetTypeId (mmwave::MmWaveSvdBeamforming::GetTypeId ());
+  
 }
 
 MmWaveVehicularHelper2::~MmWaveVehicularHelper2 ()
@@ -96,6 +102,25 @@ MmWaveVehicularHelper2::GetTypeId ()
                                    &MmWaveVehicularHelper2::GetSchedulingPatternOptionType),
                  MakeEnumChecker(DEFAULT, "Default",
                                  OPTIMIZED, "Optimized"))
+  .AddAttribute ("PathlossModel",
+                   "The type of path-loss model to be used. "
+                   "The allowed values for this attributes are the type names "
+                   "of any class inheriting from ns3::PropagationLossModel.",
+                   StringValue ("ns3::ThreeGppUmaPropagationLossModel"),
+                   MakeStringAccessor (&MmWaveVehicularHelper2::SetPathlossModelType),
+                   MakeStringChecker ())
+  .AddAttribute ("ChannelModel",
+                   "The type of MIMO channel model to be used. "
+                   "The allowed values for this attributes are the type names "
+                   "of any class inheriting from ns3::SpectrumPropagationLossModel.",
+                   StringValue ("ns3::ThreeGppSpectrumPropagationLossModel"),
+                   MakeStringAccessor (&MmWaveVehicularHelper2::SetChannelModelType),
+                   MakeStringChecker ())
+  .AddAttribute ("BeamformingModel",
+                   "The type of beamforming model to be used.",
+                   StringValue ("ns3::MmWaveSvdBeamforming"),
+                   MakeStringAccessor (&MmWaveVehicularHelper2::SetBeamformingModelType),
+                   MakeStringChecker ())
   ;
 
   return tid;
@@ -414,6 +439,102 @@ MmWaveVehicularHelper2::GetSchedulingPatternOptionType () const
   NS_LOG_FUNCTION (this);
   return m_schedulingOpt;
 }
+
+/// New Methods ///
+
+// spectrum propagation Loss model methods
+
+void
+MmWaveVehicularHelper2::SetChannelModelType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  m_spectrumPropagationLossModelType = type;
+  if (!type.empty ())
+    {
+      m_spectrumPropagationLossModelFactory = ObjectFactory ();
+      m_spectrumPropagationLossModelFactory.SetTypeId (type);
+    }
+}
+
+void
+MmWaveVehicularHelper2::SetChannelModelAttribute (std::string name, const AttributeValue &value)
+{
+  NS_LOG_FUNCTION (this);
+  m_spectrumPropagationLossModelFactory.Set (name, value);
+}
+
+// channel condition model methods
+
+void
+MmWaveVehicularHelper2::SetChannelConditionModelType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  m_channelConditionModelType = type;
+  if (!type.empty ())
+    {
+      m_channelConditionModelFactory = ObjectFactory ();
+      m_channelConditionModelFactory.SetTypeId (type);
+    }
+}
+
+// pathloss methods
+
+void
+MmWaveVehicularHelper2::SetPathlossModelType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  m_pathlossModelType = type;
+  if (!type.empty ())
+    {
+      m_pathlossModelFactory = ObjectFactory ();
+      m_pathlossModelFactory.SetTypeId (type);
+    }
+}
+
+Ptr<PropagationLossModel>
+MmWaveVehicularHelper2::GetPathLossModel ()
+{
+  NS_LOG_FUNCTION (this);
+  NS_ASSERT_MSG (!m_pathlossModel, "Unable to find the requested pathloss model");
+  return m_pathlossModel->GetObject<PropagationLossModel> ();
+}
+
+
+//beamforming methods
+
+void
+MmWaveVehicularHelper2::SetBeamformingModelType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  m_bfModelFactory = ObjectFactory (type);
+}
+void
+MmWaveVehicularHelper2::SetBeamformingModelAttribute (std::string name, const AttributeValue &value)
+{
+  NS_LOG_FUNCTION (this);
+  m_bfModelFactory.Set (name, value);
+}
+
+// Spectrum Channel methods
+
+void 
+MmWaveVehicularHelper2::SetSpectrumChannel (Ptr<ns3::SpectrumChannel> channel)
+{
+  NS_LOG_FUNCTION (this);
+  m_channel = channel;
+}
+
+Ptr<SpectrumChannel>
+MmWaveVehicularHelper2::GetSpectrumChannel ()
+{
+  NS_LOG_FUNCTION (this);
+  return m_channel;
+}
+
+
+
+
+
 
 } // namespace millicar
 } // namespace ns3

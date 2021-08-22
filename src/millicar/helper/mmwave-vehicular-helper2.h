@@ -128,6 +128,54 @@ public:
   */
   SchedulingPatternOption_t GetSchedulingPatternOptionType () const;
 
+  /// New Methods ///
+
+  // spectrum propagation Loss model methods
+
+  void SetChannelModelType (std::string type);
+
+  void SetChannelModelAttribute (std::string name, const AttributeValue &value);
+
+  // channel condition model methods
+
+  void SetChannelConditionModelType (std::string type);
+
+  // pathloss methods
+
+  void SetPathlossModelType (std::string type);
+
+  Ptr<PropagationLossModel> GetPathLossModel (void);
+
+  // beamforming methods
+  
+  /**
+   * Set the type of beamforming model to be used
+   * \param type beamforming model type
+   */
+
+  void SetBeamformingModelType (std::string type);
+
+  /**
+   * Set an attribute to the MmWaveBeamformingModel
+   * \param name name of the attribute to set
+   * \param value value to set
+   */
+  
+  void SetBeamformingModelAttribute (std::string name, const AttributeValue &value);
+  
+  // Spectrum Channel methods
+
+  void SetSpectrumChannel (Ptr<ns3::SpectrumChannel> channel);
+  
+  Ptr<SpectrumChannel> GetSpectrumChannel ();
+
+  
+
+  
+
+  //void MmWaveChannelModelInitialization (void);
+
+  
 protected:
   // inherited from Object
   virtual void DoInitialize (void) override;
@@ -153,6 +201,10 @@ private:
 
   Ptr<MmWaveVehicularTracesHelper> m_phyTraceHelper; //!< Ptr to an helper for the physical layer traces
 
+  std::string m_channelConditionModelType; //!< the type of the channel condition model to be used (empty string means no channel condition model)
+  std::string m_pathlossModelType; //!< the type of the path loss model to be used (empty string means no channel condition model)
+  Ptr<Object> m_pathlossModel;
+  
   ObjectFactory m_channelConditionModelFactory; //!< the factory for the ChannelConditionModel objects
   ObjectFactory m_spectrumPropagationLossModelFactory; //!< the factory for the SpectrumPropagationLossModel objects
   ObjectFactory m_pathlossModelFactory; //!< the factory for the PathLossModel objects
