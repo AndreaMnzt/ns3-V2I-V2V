@@ -30,6 +30,8 @@
 #include "ns3/multi-model-spectrum-channel.h"
 #include <ns3/channel-condition-model.h>
 #include <ns3/mmwave-beamforming-model.h>
+#include <ns3/three-gpp-spectrum-propagation-loss-model.h>
+#include <ns3/three-gpp-propagation-loss-model.h>
 
 namespace ns3 {
 
@@ -199,18 +201,20 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
 
   // create the antenna
   Ptr<MmWaveVehicularAntennaArrayModel> aam = CreateObject<MmWaveVehicularAntennaArrayModel> ();
+  u_int16_t AntennaNum = 16;
+  Ptr<ThreeGppAntennaArrayModel> antenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (sqrt (AntennaNum)), "NumColumns", UintegerValue (sqrt (AntennaNum)));
+
+
 
   // create and configure the tx spectrum phy
   Ptr<MmWaveSidelinkSpectrumPhy> ssp = CreateObject<MmWaveSidelinkSpectrumPhy> ();
   NS_ASSERT_MSG (node->GetObject<MobilityModel> (), "Missing mobility model");
   ssp->SetMobility (node->GetObject<MobilityModel> ());
-  ssp->SetAntenna (aam);
+  //ssp->SetAntenna (aam);
   NS_ASSERT_MSG (m_channel, "First create the channel");
   ssp->SetChannel (m_channel);
 
-  // add the spectrum phy to the spectrum channel
-  m_channel->AddRx (ssp);
-
+  
   // create and configure the chunk processor
   Ptr<mmwave::mmWaveChunkProcessor> pData = Create<mmwave::mmWaveChunkProcessor> ();
   pData->AddCallback (MakeCallback (&MmWaveSidelinkSpectrumPhy::UpdateSinrPerceived, ssp));
@@ -225,6 +229,9 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
 
   // connect the callback to report the SINR
   ssp->SetSidelinkSinrReportCallback (MakeCallback (&MmWaveSidelinkPhy::GenerateSinrReport, phy));
+
+  // add the spectrum phy to the spectrum channel
+  m_channel->AddRx (ssp);
 
   if(m_phyTraceHelper != 0)
   {
@@ -248,12 +255,14 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
   // connect the rx callback of the mac object to the rx method of the NetDevice
   mac->SetForwardUpCallback(MakeCallback(&MmWaveVehicularNetDevice::Receive, device));
 
-  // initialize the channel (if needed)
-  Ptr<MmWaveVehicularSpectrumPropagationLossModel> splm = DynamicCast<MmWaveVehicularSpectrumPropagationLossModel> (m_channel->GetSpectrumPropagationLossModel ());
-  if (splm)
-    splm->AddDevice (device, aam);
+  // initialize the 3GPP channel model
+  Ptr<SpectrumPropagationLossModel> splm = m_channel->GetSpectrumPropagationLossModel ();
+  Ptr<ThreeGppSpectrumPropagationLossModel> threeGppSplm = DynamicCast<ThreeGppSpectrumPropagationLossModel> (splm);
+  if (threeGppSplm)
+  {
+    threeGppSplm->AddDevice (device, antenna);
+  }
 
-  return device;
 }
 
 void
