@@ -340,7 +340,7 @@ private:
   
   TypeId m_errorModelType; //!< the type id of the error model
 
-  bool m_useGppAntenna; //flag to indicate if gpp antenna is used
+  bool m_useThreeGppAntenna; //flag to indicate if gpp antenna is used
   Ptr<ThreeGppAntennaArrayModel> m_threeGppAntenna; ///< the three gpp antenna model
   Ptr<mmwave::MmWaveBeamformingModel> m_beamforming; //!< used to compute the beamforming vector
 
