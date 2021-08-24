@@ -128,26 +128,24 @@ public:
   */
   SchedulingPatternOption_t GetSchedulingPatternOptionType () const;
 
-  /// New Methods ///
-
-  // spectrum propagation Loss model methods
-
   void SetChannelModelType (std::string type);
 
+  /**
+   * Set an attribute to the SpectrumPropagationLossModels
+   * \param name name of the attribute to set
+   * \param value value to set
+   */
   void SetChannelModelAttribute (std::string name, const AttributeValue &value);
-
-  // channel condition model methods
 
   void SetChannelConditionModelType (std::string type);
 
-  // pathloss methods
-
   void SetPathlossModelType (std::string type);
-
+  /**
+   * Get the path loss model used in the helper
+   * \return the propagation loss model 
+   */
   Ptr<PropagationLossModel> GetPathLossModel (void);
 
-  // beamforming methods
-  
   /**
    * Set the type of beamforming model to be used
    * \param type beamforming model type
@@ -163,16 +161,23 @@ public:
   
   void SetBeamformingModelAttribute (std::string name, const AttributeValue &value);
   
-  // Spectrum Channel methods
-
+  /**
+   * Set an initialized spectrum channel for the helper
+   * \param channel the channel to set 
+   */
   void SetSpectrumChannel (Ptr<ns3::SpectrumChannel> channel);
   
+  
+  /**
+   * Get the spectrum channel used in the helper
+   * \return the spectrum channel used  
+   */
   Ptr<SpectrumChannel> GetSpectrumChannel ();
 
   
-
-  
-
+  /**
+   * Initialize the mmwave channel 
+   */
   void MmWaveChannelModelInitialization (void);
 
   

@@ -208,7 +208,7 @@ MmWaveVehicularHelper2::InstallSingleMmWaveVehicularNetDevice (Ptr<Node> node, u
   Ptr<MmWaveSidelinkSpectrumPhy> ssp = CreateObject<MmWaveSidelinkSpectrumPhy> ();
   NS_ASSERT_MSG (node->GetObject<MobilityModel> (), "Missing mobility model");
   ssp->SetMobility (node->GetObject<MobilityModel> ());
-  ssp->UseGppAntenna(true);
+  ssp->UseThreeGppAntenna(true);
   ssp->SetThreeGppAntenna(antenna);
   NS_ASSERT_MSG (m_channel, "First create the channel");
   ssp->SetChannel (m_channel);

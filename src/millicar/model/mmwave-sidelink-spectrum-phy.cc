@@ -632,7 +632,7 @@ MmWaveSidelinkSpectrumPhy::SetErrorModelType (TypeId errorModelType)
 /// New Methods ///
 
 void
-MmWaveSidelinkSpectrumPhy::UseGppAntenna(bool useGppAntenna)
+MmWaveSidelinkSpectrumPhy::UseThreeGppAntenna(bool useGppAntenna)
 {
   m_useGppAntenna = useGppAntenna;
 }

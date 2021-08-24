@@ -262,15 +262,30 @@ public:
   * \param errorModelType type id of the error model to be used
   */
   void SetErrorModelType (TypeId errorModelType);
-
-  /// New Methods ///
   
-  void UseGppAntenna(bool useGppAntenna);
-
+  /**
+   * Set a boolean flag to use three gpp antennas 
+   * \param useGppAntenna a boolean flag to set if a gpp antenna is in use
+   */
+  void UseThreeGppAntenna(bool useGppAntenna);
+  
+  /**
+   * set the ThreeGppAntennaArrayModel to be used
+   *
+   * \param a the Antenna Model
+   */
   void SetThreeGppAntenna (Ptr<ThreeGppAntennaArrayModel> a);
   
+  /**
+   * Set the beamforming module
+   * \param bfModule the beamforming module
+   */
   void SetBeamformingModel (Ptr<mmwave::MmWaveBeamformingModel> bfModule);
-  
+
+  /**
+   * Returns the beamforming module
+   * \return the beamforming module
+   */
   Ptr<mmwave::MmWaveBeamformingModel> GetBeamformingModel () const;
 
 private:
