@@ -178,6 +178,8 @@ MmWaveSidelinkSpectrumPhy::GetRxAntenna ()
 {
   if(m_useThreeGppAntenna)
   {
+    // NOTE the antenna gain is implicitly taken into account in the channel
+    // model classes (like in MmWaveSpectrumPhy::GetRxAntenna)
     return 0;
   }
   return m_antenna;
