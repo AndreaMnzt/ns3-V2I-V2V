@@ -321,7 +321,14 @@ public:
   void EnableUlPhyTrace ();
   void EnableEnbSchedTrace ();
 
+  /**
+   * Get a spectrum channel used in the CC map.
+   *
+   * \param index of the channel of the CCmap
+   */
   
+  Ptr<SpectrumChannel> GetSpectrumChannel(u_int8_t index);
+
 protected:
   virtual void DoInitialize ();
 

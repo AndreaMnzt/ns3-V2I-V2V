@@ -19,6 +19,7 @@ def build(bld):
         'model/mmwave-vehicular-net-device.cc',
         'model/mmwave-vehicular-antenna-array-model.cc',
         'helper/mmwave-vehicular-helper.cc',
+        'helper/mmwave-vehicular-helper2.cc',
         'helper/mmwave-vehicular-traces-helper.cc'
         ]
 
@@ -43,6 +44,7 @@ def build(bld):
         'model/mmwave-vehicular-net-device.h',
         'model/mmwave-vehicular-antenna-array-model.h',
         'helper/mmwave-vehicular-helper.h',
+        'helper/mmwave-vehicular-helper2.h',
         'helper/mmwave-vehicular-traces-helper.h'
         ]
 
