@@ -282,9 +282,9 @@ int main (int argc, char *argv[])
   AsciiTraceHelper asciiTraceHelper;
   std::string filename;
   if(channel_shared){
-    filename = "voice_throughput.txt";
+    filename = "video_throughput.txt";
   } else {
-    filename = "voice_throughput-not-shared.txt";
+    filename = "video_throughput-not-shared.txt";
   }
   Ptr<OutputStreamWrapper> stream = asciiTraceHelper.CreateFileStream (filename);
   apps.Get(0)->TraceConnectWithoutContext ("Rx", MakeCallback (&Rx));
