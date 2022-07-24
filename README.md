@@ -5,7 +5,8 @@ of 5G cellular and vehicular networks operating at mmWaves.
 
 Features:
 
-* The module provides integration of mmwave and millicar modules to simulate vehicular scenarios with Vehicle to Vehicle (V2V) and Vehicle to Infrastructure (V2I) communication.
+* The module provides an integration of mmwave and millicar modules to simulate vehicular scenarios with Vehicle to Vehicle (V2V) and Vehicle to Infrastructure (V2I) communication. This project is discribed in the related project paper, to get a copy please contact Andrea Manzato (GitHub: AndreaMnzt).
+
   
 ## Installation
 This repository contains a complete ns-3 installation with the addition of the mmwave and millicar modules. 
@@ -18,11 +19,26 @@ cd ns3-V2I-V2V
 ```
 
 ## Usage example 
-You can use the following command to run the `mmwave-simple-epc` example. 
-```
-./waf --run mmwave-simple-epc
-```
-Other examples are included in `src/mmwave/examples/`
+The following commands outputs SINR data and throughput data, which can be plot through the plot below,
+The SINR data are saved in the sinr-mcs.txt, which is the standard output file for the millicar module,
+
+1. Scenario A:
+
+./waf --run scratch/mmwave-vehicular-video-integration.cc
+
+plot:
+python3 millicar_video_plot_sinr.py
+// python3 throughput_video_plot.py //not used
+
+2. Scenario B:
+
+// The following command is not necessary:
+// you just need to run the first epc plot python script, which will run internally the 
+// ./waf --run scratch/mmwave-vehicular-epc-integration.cc 
+
+// plot ecp scripts:
+python3 millicar_epc_plot_sinr.py //this will also run the simulation
+python3 throughput_epc_plot.py 
 
 ## Related modules
 - MilliCar is an ns-3 module for the simulation of mmWave NR V2X networks. Check [this repo](https://github.com/signetlabdei/millicar) for further details.
@@ -66,6 +82,29 @@ The ns-3 mmWave module is the result of the development effort carried out by di
 - Russell Ford, NYU Wireless
 - Gabriel Arrobo, Intel
 
+The integration of MmWave and MilliCar modules in this repository was developed by Andrea Manzato, with the support of professors and assistants from University of Padua (UniPd).
+
 ## License ##
 
 This software is licensed under the terms of the GNU GPLv2, as like as ns-3. See the LICENSE file for more details.
+
+## Author Notes
+
+This extension was developed for the Network Analysis and Simulation course project. 
+The aim of the project is to integrate mmwave and millicar simulation in the same simulation script to evaluate interference effects.
+An example of the integration can be found in the following files:
+- Scenario A: scratch/mmwave-vehicular-video-integration.cc
+- Scenario B: scratch/mmwave-vehicular-epc-integration.cc
+This module DOES NOT integrate millicar and mmwave communication in the same node (e.g. a vehicle can still not communicate with an eNB),
+However this might be achieved by integrate mmwave and millicar netdevice instances in the same Node.
+
+If you need help to understand how this module was developed or you want to get in touch, please open an issue on this repository or PM me on LinkedIn.
+All files in this repository are distributed in the hope that they will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+This program is distributed under the same license and conditions of ns-3 simulator, MilliCar and MmWave module at 24 July 2022.
+
+Per aspera ad astra.
+Andrea Manzato
