@@ -2796,5 +2796,12 @@ MmWaveHelper::SetUeComponentCarrierManagerType (std::string type)
   m_ueComponentCarrierManagerFactory.SetTypeId (type);
 }
 
+Ptr<SpectrumChannel> 
+MmWaveHelper::GetSpectrumChannel(u_int8_t index)
+{
+  NS_LOG_FUNCTION (this);
+  return m_channel [index]; //return the index channel of the ccmap
+}
+
 }
 }

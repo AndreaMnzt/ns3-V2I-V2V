@@ -42,6 +42,9 @@
 #include "ns3/mmwave-control-messages.h"
 #include <ns3/mmwave-error-model.h>
 
+#include <ns3/three-gpp-antenna-array-model.h>
+#include <ns3/mmwave-beamforming-model.h>
+
 namespace ns3 {
 
 namespace millicar {
@@ -259,6 +262,31 @@ public:
   * \param errorModelType type id of the error model to be used
   */
   void SetErrorModelType (TypeId errorModelType);
+  
+  /**
+   * Set a boolean flag to use three gpp antennas 
+   * \param useGppAntenna a boolean flag to set if a gpp antenna is in use
+   */
+  void UseThreeGppAntenna(bool useGppAntenna);
+  
+  /**
+   * set the ThreeGppAntennaArrayModel to be used
+   *
+   * \param a the Antenna Model
+   */
+  void SetThreeGppAntenna (Ptr<ThreeGppAntennaArrayModel> a);
+  
+  /**
+   * Set the beamforming module
+   * \param bfModule the beamforming module
+   */
+  void SetBeamformingModel (Ptr<mmwave::MmWaveBeamformingModel> bfModule);
+
+  /**
+   * Returns the beamforming module
+   * \return the beamforming module
+   */
+  Ptr<mmwave::MmWaveBeamformingModel> GetBeamformingModel () const;
 
 private:
   /**
@@ -311,6 +339,10 @@ private:
   //EventId m_endRxCtrlEvent;
   
   TypeId m_errorModelType; //!< the type id of the error model
+
+  bool m_useThreeGppAntenna; //flag to indicate if gpp antenna is used
+  Ptr<ThreeGppAntennaArrayModel> m_threeGppAntenna; ///< the three gpp antenna model
+  Ptr<mmwave::MmWaveBeamformingModel> m_beamforming; //!< used to compute the beamforming vector
 
 };
 
